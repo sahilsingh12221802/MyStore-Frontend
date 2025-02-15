@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://mystore-backend-qnu3.onrender.com/verse/auth";
+const API_URL = "https://mystore-backend-fn9r.onrender.com/verse/auth";
 
 const register = async (userData) => {
   const response = await axios.post(`${API_URL}/register`, userData);

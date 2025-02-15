@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://mystore-backend-qnu3.onrender.com/verse/cart";
+const API_URL = "https://mystore-backend-fn9r.onrender.com/verse/cart";
 
 const getCart = async () => {
   const token = localStorage.getItem("token");

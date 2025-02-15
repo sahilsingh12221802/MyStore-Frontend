@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://mystore-backend-qnu3.onrender.com/verse/products";
+const API_URL = "https://mystore-backend-fn9r.onrender.com/verse/products";
 
 const getProducts = async () => {
   const response = await axios.get(`${API_URL}/`);
