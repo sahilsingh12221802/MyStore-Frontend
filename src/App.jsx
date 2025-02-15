@@ -1,14 +1,18 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import SigninSignup from "./pages/SigninSignup";
 import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import authApi from "./api/auth";
-import cartApi from "./api/cart"; // Import cartApi
+import cartApi from "./api/cart";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [showCart, setShowCart] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -33,18 +37,24 @@ function App() {
   };
 
   const handleLogout = () => {
-    authApi.logout(); // Clear the token
-    setIsSignedIn(false); // Set signed-in state to false
-    setCartItems([]); // Clear the cart
-    setShowCart(false); // Hide the cart page
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
+    if (confirmLogout) {
+      authApi.logout(); // Clear the token
+      setIsSignedIn(false); // Set signed-in state to false
+      setCartItems([]); // Clear the cart
+      setShowCart(false); // Hide the cart page
+      toast.success("Logged out successfully!");
+    }
   };
 
   const handleAddToCart = async (productId) => {
     try {
       await cartApi.addProductToCart(productId, 1); // Add product to cart with quantity 1
       fetchCart(); // Refresh the cart
+      toast.success("Product added to cart!");
     } catch (error) {
       console.error("Failed to add to cart:", error);
+      toast.error("Failed to add product to cart.");
     }
   };
 
@@ -52,8 +62,10 @@ function App() {
     try {
       await cartApi.updateProductInCart(productId, quantity);
       fetchCart();
+      toast.success("Cart updated!");
     } catch (error) {
       console.error("Failed to update quantity:", error);
+      toast.error("Failed to update cart.");
     }
   };
 
@@ -61,18 +73,24 @@ function App() {
     try {
       await cartApi.updateProductInCart(productId, 0); // Set quantity to 0 to remove the item
       fetchCart();
+      toast.success("Product removed from cart!");
     } catch (error) {
       console.error("Failed to remove item:", error);
+      toast.error("Failed to remove product from cart.");
     }
   };
 
   const handleCheckout = async () => {
+    setIsLoading(true);
     try {
       await cartApi.checkout();
-      setCartItems([]);
-      alert("Checkout successful!");
+      setCartItems([]); // Clear the cart
+      toast.success("Checkout successful!");
     } catch (error) {
       console.error("Failed to checkout:", error);
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -113,6 +131,7 @@ function App() {
       ) : (
         <SigninSignup onSignIn={handleSignIn} />
       )}
+      <ToastContainer />
     </div>
   );
 }

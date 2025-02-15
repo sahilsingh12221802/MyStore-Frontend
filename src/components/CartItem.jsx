@@ -1,6 +1,13 @@
+import { motion } from "framer-motion";
+
 const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
   return (
-    <div className="border p-4 rounded-lg shadow-md flex justify-between items-center">
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      className="border p-4 rounded-lg shadow-md flex justify-between items-center"
+    >
       <div>
         <h3 className="text-lg font-semibold">{item.product.name}</h3>
         <p className="text-gray-600">${item.product.cost}</p>
@@ -20,7 +27,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
           Remove
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
